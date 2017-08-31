@@ -50,7 +50,7 @@ var Game = function() {
   g.canvas = canvas
   g.context = context
   // events
-  /*window.addEventListener('keydown', function(event) {
+  window.addEventListener('keydown', function(event) {
     g.keydowns[event.key] = true
   })
   window.addEventListener('keyup', function(event) {
@@ -60,17 +60,18 @@ var Game = function() {
   g.registerAction = function(key, callback) {
     g.actions[key] = callback
   }
-  */
   // timer
   setInterval(function() {
     // events
-   /* var actions = Object.keys(g.actions)
+    var actions = Object.keys(g.actions)
+    
     for (var i = 0; i < actions.length; i++) {
-      var key = action[i]
+      var key = actions[i]
       if (g.keydowns[key]) {
-        g.actions[key]
+        // 如果按键按下，调用注册的action
+        g.actions[key]()
       }
-    }*/
+    }
     // update
     g.update()
     // clear
@@ -87,36 +88,14 @@ var __main = function() {
 
   var paddle = Paddle()
 
-  var leftDown = false
-  var rightDown = false
-  //events
-  window.addEventListener('keydown', function(event) {
-    var k = event.key
-    // log(event)
-    if (k == 'a') {
-      leftDown = true
-    } else if (k == 'd') {
-      rightDown = true
-    }
+  game.registerAction('a', function() {
+    paddle.moveLeft()
   })
-
-  window.addEventListener('keyup', function(event) {
-    var k = event.key
-    // log(event)
-    if (k == 'a') {
-      leftDown = false
-    } else if (k == 'd') {
-      rightDown = false
-    }
+  game.registerAction('d', function() {
+    paddle.moveRight()
   })
 
   game.update = function() {
-    // update x
-    if (leftDown) {
-      paddle.moveLeft()
-    } else if (rightDown) {
-      paddle.moveRight()
-    }
   }
   game.draw = function() {
     game.context.drawImage(paddle.image, paddle.x, paddle.y)
